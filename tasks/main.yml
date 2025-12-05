@@ -1,0 +1,32 @@
+---
+
+- name: Ensure felidae dir exists
+  ansible.builtin.file:
+    dest: "{{ felidae_home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Render felidae docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ felidae_home }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Check if Docker network exists
+  ansible.builtin.command: "docker network inspect {{ felidae_docker_network }}"
+  register: felidae_docker_net_inspect
+  failed_when: felidae_docker_net_inspect.rc not in [0, 1]
+  changed_when: false
+
+- name: Create the Docker network in advance of Felidae and CometBFT starting
+  ansible.builtin.command: "docker network create {{ felidae_docker_network }}"
+  when: felidae_docker_net_inspect.rc == 1 and felidae_docker_setup_network
+
+- name: Start Felidae via Docker Compose
+  ansible.builtin.command: docker compose up -d
+  args:
+    chdir: "{{ felidae_home }}"

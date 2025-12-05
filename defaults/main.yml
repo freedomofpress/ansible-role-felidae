@@ -1,0 +1,36 @@
+---
+
+# Where the app home lives
+felidae_home: /opt/felidae
+
+# Version
+felidae_version: latest
+
+# Docker image
+felidae_docker_image: "ghcr.io/freedomofpress/felidae:{{ felidae_version }}"
+
+# Docker restart policy
+felidae_docker_restart: unless-stopped
+
+# Docker network name. This needs to match the name used in the
+# CometBFT compose file. We assume we will create this network in
+# this role, but you might wish to do it in the other role (in
+# which case, set the variable below this one to false).
+felidae_docker_network: webcat
+
+felidae_docker_setup_network: true
+
+# Name for the container
+felidae_docker_container_name: felidae
+
+# The external port for the Felidae read-only 'query' port.
+# This can be made reachable by your CometBFT sentry node,
+# it is non-sensitive.
+felidae_query_external_port: 80
+
+# The internal port for the Felidae read-only 'query' port
+felidae_query_internal_port: 8080
+
+# The port for the Felidae ABCI app
+felidae_abci_external_port: 26658
+felidae_abci_internal_port: 26658
