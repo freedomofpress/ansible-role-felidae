@@ -29,7 +29,7 @@ felidae_docker_container_name: felidae
 felidae_query_external_port: 80
 
 # The internal port for the Felidae read-only 'query' port
-felidae_query_internal_port: 8080
+felidae_query_internal_port: 80
 
 # The port for the Felidae ABCI app
 felidae_abci_external_port: 26658
