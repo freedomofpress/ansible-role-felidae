@@ -15,6 +15,8 @@ services:
       - start
       - --abci
       - "{{ felidae_abci_internal_port }}"
+      - --abci-host
+      - "{{ felidae_abci_host }}"
       - --query
       - "{{ felidae_query_internal_port }}"
 
