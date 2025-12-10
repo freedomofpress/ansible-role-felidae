@@ -3,6 +3,9 @@
 # Where the app home lives
 felidae_home: /opt/felidae
 
+# What subdirectory of felidae_home (typically) to mount as the persistent volume
+felidae_volume_path: storage
+
 # Version
 felidae_version: latest
 

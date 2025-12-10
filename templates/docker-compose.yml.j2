@@ -3,6 +3,8 @@ services:
     image: {{ felidae_docker_image }}
     container_name: {{ felidae_docker_container_name }}
     restart: {{ felidae_docker_restart }}
+    volumes:
+      - {{ felidae_home }}/{{ felidae_volume_path }}:/home/felidae/.local/share/felidae/storage
     networks:
       - {{ felidae_docker_network }}
     ports:
