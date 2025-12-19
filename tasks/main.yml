@@ -8,7 +8,7 @@
     group: root
     mode: "0755"
 
-- name: Ensure felidae persistent dir dir exists
+- name: Ensure felidae persistent dir exists
   ansible.builtin.file:
     dest: "{{ felidae_home }}/{{ felidae_volume_path }}"
     state: directory
@@ -23,6 +23,24 @@
     owner: root
     group: root
     mode: "0644"
+
+- name: Ensure felidae admin keys dir exists (when an admin)
+  ansible.builtin.file:
+    dest: "{{ felidae_home }}/{{ felidae_admin_keys_path }}"
+    state: directory
+    owner: 1000
+    group: 1000
+    mode: "0750"
+  when: felidae_admin
+
+- name: Ensure felidae oracle keys dir exists (when an oracle)
+  ansible.builtin.file:
+    dest: "{{ felidae_home }}/{{ felidae_oracle_keys_path }}"
+    state: directory
+    owner: 1000
+    group: 1000
+    mode: "0750"
+  when: felidae_oracle
 
 - name: Check if Docker network exists
   ansible.builtin.command: "docker network inspect {{ felidae_docker_network }}"

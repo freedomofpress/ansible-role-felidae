@@ -28,8 +28,10 @@ felidae_docker_container_name: felidae
 
 # The external port for the Felidae read-only 'query' port.
 # This can be made reachable by your CometBFT sentry node,
-# it is non-sensitive.
-felidae_query_external_port: 80
+# it is non-sensitive. You can run an Nginx reverse proxy
+# in front to terminate HTTPS for this Felidae's query endpoint
+# as well as the felidae_oracle's POST /observe and GET /health
+felidae_query_external_port: 8080
 
 # The internal port for the Felidae read-only 'query' port
 felidae_query_internal_port: 80
@@ -46,3 +48,30 @@ felidae_abci_internal_port: 26658
 # Just be sure to not allow direct access to this port from the outside world!
 # We bind the Docker NAT side to 127.0.0.1 for this reason.
 felidae_abci_host: 0.0.0.0
+
+# The below options define whether this host runs a Felidae Admin or an Oracle
+# container (in addition to the main Felidae service).
+
+# Whether this felidae instance is an admin. Admins should run on the CometBFT validators.
+felidae_admin: false
+felidae_admin_docker_container_name: felidae-admin
+
+# Whether this felidae instance is an oracle. Oracles should run on the CometBFT sentries.
+felidae_oracle: false
+felidae_oracle_docker_container_name: felidae-oracle
+
+# External port for the Felidae Oracle's POST /observe and GET /health endpoints.
+# You would put these behind an Nginx reverse proxy that terminates HTTPS.
+felidae_oracle_external_port: 8081
+
+# Internal port of the Felidae Oracle service.
+felidae_oracle_internal_port: 8080
+
+# CometBFT node for the Oracle to communicate with
+felidae_oracle_node: http://cometbft-sentry:26657
+
+# The path under felidae_home to store Admin keys.
+felidae_admin_keys_path: admin_keys
+
+# The path under felidae_home to store Oracle keys.
+felidae_oracle_keys_path: oracle_keys

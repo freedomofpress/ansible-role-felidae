@@ -19,7 +19,44 @@ services:
       - "{{ felidae_abci_host }}"
       - --query
       - "{{ felidae_query_internal_port }}"
-
+{% if felidae_admin %}
+  felidae_admin:
+    image: {{ felidae_docker_image }}
+    container_name: {{ felidae_admin_docker_container_name }}
+    restart: 'no'
+    volumes:
+      - {{ felidae_home }}/{{ felidae_admin_keys_path }}:/keys
+    networks:
+      - {{ felidae_docker_network }}
+    command:
+      - /usr/bin/felidae
+      - admin
+      - identity
+      - --homedir
+      - /keys
+{% endif %}
+{% if felidae_oracle %}
+  felidae_oracle:
+    image: {{ felidae_docker_image }}
+    container_name: {{ felidae_oracle_docker_container_name }}
+    restart: {{ felidae_docker_restart }}
+    volumes:
+      - {{ felidae_home }}/{{ felidae_oracle_keys_path }}:/keys
+    networks:
+      - {{ felidae_docker_network }}
+    ports:
+      - "127.0.0.1:{{ felidae_oracle_external_port }}:{{ felidae_oracle_internal_port }}"
+    command:
+      - /usr/bin/felidae
+      - oracle
+      - server
+      - --homedir
+      - /keys
+      - --node
+      - "{{ felidae_oracle_node }}"
+      - --port
+      - "{{ felidae_oracle_internal_port }}"
+{% endif %}
 networks:
   {{ felidae_docker_network }}:
     external: true
