@@ -13,12 +13,10 @@ services:
     command:
       - /usr/bin/felidae
       - start
-      - --abci
-      - "{{ felidae_abci_internal_port }}"
-      - --abci-host
-      - "{{ felidae_abci_host }}"
-      - --query
-      - "{{ felidae_query_internal_port }}"
+      - --abci-bind
+      - "{{ felidae_host }}:{{ felidae_abci_internal_port }}"
+      - --query-bind
+      - "{{ felidae_host }}:{{ felidae_query_internal_port }}"
 {% if felidae_admin %}
   felidae_admin:
     image: {{ felidae_docker_image }}
@@ -54,8 +52,8 @@ services:
       - /keys
       - --node
       - "{{ felidae_oracle_node }}"
-      - --port
-      - "{{ felidae_oracle_internal_port }}"
+      - --bind
+      - "{{ felidae_host }}:{{ felidae_oracle_internal_port }}"
 {% endif %}
 networks:
   {{ felidae_docker_network }}:
